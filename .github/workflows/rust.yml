@@ -23,10 +23,10 @@ jobs:
       run: |
         cargo read-manifest > test.json
         $env:version = Get-Content -Path 'test.json' -Raw | ConvertFrom-Json | ForEach-Object {echo $_.version}
+        $env:name = Get-Content -Path 'test.json' -Raw | ConvertFrom-Json | ForEach-Object {echo $_.name}
         del test.json
         echo "VERSION=$env:version" >> $env:GITHUB_ENV
-        echo "VERSION=$env:version"
-        echo ${env:version}
+        echo "NAME=$env:name" >> $env:GITHUB_ENV
     - name: Display the path
       run: echo $env:VERSION
     - name: Create Release
@@ -35,8 +35,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: ${{ env.VERSION }}
+        release_name: ${{ env.VERSION }}
         draft: false
         prerelease: false
     - name: Upload Release Asset
@@ -46,6 +46,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./target/release/win.exe
-        asset_name: win.exe
+        asset_path: ./target/release/${{ env.NAME }}.exe
+        asset_name: ${{ env.NAME }}.exe
         asset_content_type: application/octet-stream
