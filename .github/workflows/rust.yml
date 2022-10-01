@@ -28,7 +28,7 @@ jobs:
         echo "VERSION=$env:version"
         echo ${env:version}
     - name: Display the path
-      run: echo ${{ steps.get_version.outputs.version }}
+      run: echo $env:VERSION
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
