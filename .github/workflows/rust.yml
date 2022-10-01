@@ -23,10 +23,8 @@ jobs:
         cargo read-manifest > test.json
         $env:VERSION = Get-Content -Path 'test.json' -Raw | ConvertFrom-Json | ForEach-Object {echo $_.version}
         del test.json
-      shell: powershell        
     - name: Display the path
       run: echo ${env:VERSION}
-      shell: powershell        
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
