@@ -22,6 +22,8 @@ jobs:
         $env:version = Get-Content -Path 'test.json' -Raw | ConvertFrom-Json | ForEach-Object {echo $_.version}
         $env:name = Get-Content -Path 'test.json' -Raw | ConvertFrom-Json | ForEach-Object {echo $_.name}
         del test.json
+        echo "VERSION=$env:version" >> $env:GITHUB_ENV
+        echo "NAME=$env:name" >> $env:GITHUB_ENV        
     - name: Display Environment
       run: |
         echo $env:VERSION
