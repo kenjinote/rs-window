@@ -11,15 +11,12 @@ env:
 
 jobs:
   build:
-
     runs-on: windows-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Build
       run: cargo build --release
-    - name: Get Version
-      id: get_version
+    - name: Get Environment
       run: |
         cargo read-manifest > test.json
         $env:version = Get-Content -Path 'test.json' -Raw | ConvertFrom-Json | ForEach-Object {echo $_.version}
@@ -27,8 +24,10 @@ jobs:
         del test.json
         echo "VERSION=$env:version" >> $env:GITHUB_ENV
         echo "NAME=$env:name" >> $env:GITHUB_ENV
-    - name: Display the path
-      run: echo $env:VERSION
+    - name: Display Environment
+      run: |
+        echo $env:VERSION
+        echo $env:NAME
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
