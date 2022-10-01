@@ -19,14 +19,14 @@ jobs:
     - name: Build
       run: cargo build --release
     - name: Get Version
+      id: get_version
       run: |
         cargo read-manifest > test.json
-        $env:VERSION = Get-Content -Path 'test.json' -Raw | ConvertFrom-Json | ForEach-Object {echo $_.version}
+        $env:version = Get-Content -Path 'test.json' -Raw | ConvertFrom-Json | ForEach-Object {echo $_.version}
         del test.json
-        echo ${env:VERSION}
-        echo hello
+        echo ${env:version}
     - name: Display the path
-      run: echo ${env:VERSION}
+      run: echo ${{ steps.get_version.outputs.version }}
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
