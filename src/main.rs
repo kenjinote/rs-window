@@ -2,12 +2,13 @@
 use winapi::{
     um::{
         winuser::{RegisterClassW, WNDCLASSW, CS_HREDRAW, CS_VREDRAW,
-                  LoadIconW, IDI_APPLICATION, LoadCursorW, IDC_ARROW,
+                  LoadIconW, LoadCursorW, IDC_ARROW,
                   CreateWindowExW, ShowWindow, SW_NORMAL, UpdateWindow,
                   GetMessageW, TranslateMessage, DispatchMessageW, MSG,
                   WM_DESTROY, PostQuitMessage, DefWindowProcW, WS_OVERLAPPEDWINDOW,
-                  CW_USEDEFAULT},
+                  CW_USEDEFAULT, MAKEINTRESOURCEW},
         wingdi::{GetStockObject, WHITE_BRUSH},
+		libloaderapi::{GetModuleHandleW},
     },
     shared::{
         windef::{HWND, HBRUSH},
@@ -48,7 +49,7 @@ unsafe fn register_wndclass(class_name: &[u16]) -> bool {
     let mut winc = mem::zeroed::<WNDCLASSW>();
     winc.style = CS_HREDRAW | CS_VREDRAW;
     winc.lpfnWndProc = Some(win_proc);
-    winc.hIcon = LoadIconW(ptr::null_mut(), IDI_APPLICATION);
+    winc.hIcon = LoadIconW(GetModuleHandleW(ptr::null_mut()), MAKEINTRESOURCEW(1));
     winc.hCursor = LoadCursorW(ptr::null_mut(), IDC_ARROW);
     winc.hbrBackground = GetStockObject(WHITE_BRUSH as i32) as HBRUSH;
     winc.lpszClassName = class_name.as_ptr();

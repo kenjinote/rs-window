@@ -1,4 +1,5 @@
 /target
 /.vs/slnx.sqlite
 /.vs
+/.github
 /Cargo.lock

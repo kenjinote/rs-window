@@ -7,4 +7,7 @@ edition = "2021"
 
 [dependencies.winapi]
 version = "0.3"
-features = ["winuser"]
+features = ["winuser", "libloaderapi"]
+
+[target.'cfg(windows)'.build-dependencies]
+windres = "0.1"
